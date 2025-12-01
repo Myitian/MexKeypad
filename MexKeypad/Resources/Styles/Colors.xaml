@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+  <Color x:Key="LightPrimaryLighter">#DDDDDD</Color>
+  <Color x:Key="LightPrimaryLight">#EEEEEE</Color>
+  <Color x:Key="LightPrimaryDefault">#CCCCCC</Color>
+  <Color x:Key="LightPrimaryHover">#BBBBBB</Color>
+  <Color x:Key="LightPrimaryActive">#AAAAAA</Color>
+  <Color x:Key="LightSecondaryDefault">#66CCFF</Color>
+  <Color x:Key="LightSecondaryHover">#0284C7</Color>
+  <Color x:Key="LightSecondaryActive">#0369A1</Color>
+  <Color x:Key="LightTextPrimary">#111111</Color>
+  <Color x:Key="LightTextSecondary">#333333</Color>
+  <Color x:Key="LightTextTertiary">#888888</Color>
+  <Color x:Key="LightBackgroundPrimary">#FFFFFF</Color>
+  <Color x:Key="LightBackgroundSecondary">#F8F8F8</Color>
+  <Color x:Key="LightBackgroundTertiary">#F0F0F0</Color>
+  <Color x:Key="LightBorderDefault">#E0E0E0</Color>
+  <Color x:Key="LightBorderHover">#CCCCCC</Color>
+  <Color x:Key="LightBorderActive">#2563EB</Color>
+
+  <Color x:Key="DarkPrimaryLighter">#222222</Color>
+  <Color x:Key="DarkPrimaryLight">#333333</Color>
+  <Color x:Key="DarkPrimaryDefault">#444444</Color>
+  <Color x:Key="DarkPrimaryHover">#555555</Color>
+  <Color x:Key="DarkPrimaryActive">#666666</Color>
+  <Color x:Key="DarkSecondaryDefault">#0EA5E9</Color>
+  <Color x:Key="DarkSecondaryHover">#38BDF8</Color>
+  <Color x:Key="DarkSecondaryActive">#0284C7</Color>
+  <Color x:Key="DarkTextPrimary">#EEEEEE</Color>
+  <Color x:Key="DarkTextSecondary">#CCCCCC</Color>
+  <Color x:Key="DarkTextTertiary">#888888</Color>
+  <Color x:Key="DarkBackgroundPrimary">#111111</Color>
+  <Color x:Key="DarkBackgroundSecondary">#222222</Color>
+  <Color x:Key="DarkBackgroundTertiary">#333333</Color>
+  <Color x:Key="DarkBorderDefault">#444444</Color>
+  <Color x:Key="DarkBorderHover">#555555</Color>
+  <Color x:Key="DarkBorderActive">#3B82F6</Color>
+
+  <Color x:Key="Gray100">#E1E1E1</Color>
+  <Color x:Key="Gray200">#C8C8C8</Color>
+  <Color x:Key="Gray300">#ACACAC</Color>
+  <Color x:Key="Gray400">#919191</Color>
+  <Color x:Key="Gray500">#6E6E6E</Color>
+  <Color x:Key="Gray600">#404040</Color>
+  <Color x:Key="Gray900">#212121</Color>
+  <Color x:Key="Gray950">#141414</Color>
+</ResourceDictionary>

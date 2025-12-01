@@ -1,0 +1,79 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MexKeypad">
+  <Grid RowSpacing="5"
+        ColumnSpacing="5">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Button Grid.Row="0"
+            Grid.Column="0"
+            Text="F13"
+            StyleClass="mexkey"
+            CommandParameter="vk:F13" />
+    <Button Grid.Row="0"
+            Grid.Column="1"
+            Text="F14"
+            StyleClass="mexkey"
+            CommandParameter="vk:F14" />
+    <Button Grid.Row="0"
+            Grid.Column="2"
+            Text="F15"
+            StyleClass="mexkey"
+            CommandParameter="vk:F15" />
+    <Button Grid.Row="0"
+            Grid.Column="3"
+            Text="F16"
+            StyleClass="mexkey"
+            CommandParameter="vk:F16" />
+    <Button Grid.Row="1"
+            Grid.Column="0"
+            Text="F17"
+            StyleClass="mexkey"
+            CommandParameter="vk:F17" />
+    <Button Grid.Row="1"
+            Grid.Column="1"
+            Text="F18"
+            StyleClass="mexkey"
+            CommandParameter="vk:F18" />
+    <Button Grid.Row="1"
+            Grid.Column="2"
+            Text="F19"
+            StyleClass="mexkey"
+            CommandParameter="vk:F19" />
+    <Button Grid.Row="1"
+            Grid.Column="3"
+            Text="F20"
+            StyleClass="mexkey"
+            CommandParameter="vk:F20" />
+    <Button Grid.Row="2"
+            Grid.Column="0"
+            Text="F21"
+            StyleClass="mexkey"
+            CommandParameter="vk:F21" />
+    <Button Grid.Row="2"
+            Grid.Column="1"
+            Text="F22"
+            StyleClass="mexkey"
+            CommandParameter="vk:F22" />
+    <Button Grid.Row="2"
+            Grid.Column="2"
+            Text="F23"
+            StyleClass="mexkey"
+            CommandParameter="vk:F23" />
+    <Button Grid.Row="2"
+            Grid.Column="3"
+            Text="F24"
+            StyleClass="mexkey"
+            CommandParameter="vk:F24" />
+  </Grid>
+</ContentView>

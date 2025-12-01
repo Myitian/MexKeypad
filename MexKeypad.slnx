@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="MexForwarder/MexForwarder.csproj" Id="496318f3-a02e-458f-b929-d37360bc8e80" />
+  <Project Path="MexKeypad/MexKeypad.csproj">
+    <Deploy Solution="*|Any CPU" />
+  </Project>
+  <Project Path="MexShared/MexShared.csproj" Id="50ae6f8e-2272-42d1-acbc-276a1ce67bbc" />
+</Solution>

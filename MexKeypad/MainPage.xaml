@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MexKeypad"
+             x:Class="MexKeypad.MainPage"
+             x:DataType="local:ConfigModel"
+             Title="MexKeypad"
+             Loaded="ContentPage_Loaded">
+  <ContentPage.Resources>
+    <local:KeyHandlerModeDisplayConverter x:Key="KeyHandlerModeDisplay" />
+    <local:NotEqualsConverter x:Key="NotEquals" />
+  </ContentPage.Resources>
+  <Grid x:Name="AdaptiveGrid"
+        SizeChanged="AdaptiveGrid_SizeChanged">
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup x:Name="LayoutStates">
+        <VisualState x:Name="PortraitState">
+          <VisualState.Setters>
+            <Setter TargetName="AdaptiveGrid"
+                    Property="ColumnDefinitions"
+                    Value="*, *" />
+            <Setter TargetName="AdaptiveGrid"
+                    Property="RowDefinitions"
+                    Value="60, *" />
+            <Setter TargetName="NavKeypad"
+                    Property="Grid.Row"
+                    Value="0" />
+            <Setter TargetName="NavKeypad"
+                    Property="Grid.Column"
+                    Value="0" />
+            <Setter TargetName="NavSettings"
+                    Property="Grid.Row"
+                    Value="0" />
+            <Setter TargetName="NavSettings"
+                    Property="Grid.Column"
+                    Value="1" />
+            <Setter TargetName="MainArea"
+                    Property="Grid.Row"
+                    Value="1" />
+            <Setter TargetName="MainArea"
+                    Property="Grid.Column"
+                    Value="0" />
+            <Setter TargetName="MainArea"
+                    Property="Grid.ColumnSpan"
+                    Value="2" />
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="LandscapeState">
+          <VisualState.Setters>
+            <Setter TargetName="AdaptiveGrid"
+                    Property="ColumnDefinitions"
+                    Value="60, *" />
+            <Setter TargetName="AdaptiveGrid"
+                    Property="RowDefinitions"
+                    Value="*, *" />
+            <Setter TargetName="NavKeypad"
+                    Property="Grid.Row"
+                    Value="0" />
+            <Setter TargetName="NavKeypad"
+                    Property="Grid.Column"
+                    Value="0" />
+            <Setter TargetName="NavSettings"
+                    Property="Grid.Row"
+                    Value="1" />
+            <Setter TargetName="NavSettings"
+                    Property="Grid.Column"
+                    Value="0" />
+            <Setter TargetName="MainArea"
+                    Property="Grid.Row"
+                    Value="0" />
+            <Setter TargetName="MainArea"
+                    Property="Grid.Column"
+                    Value="1" />
+            <Setter TargetName="MainArea"
+                    Property="Grid.RowSpan"
+                    Value="2" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+    <Button x:Name="NavKeypad"
+            Text="⌨️"
+            StyleClass="tab-button"
+            Command="{Binding SwitchPage}"
+            CommandParameter="tab-keypad" />
+    <Button x:Name="NavSettings"
+            Text="⚙️"
+            StyleClass="tab-button"
+            Command="{Binding SwitchPage}"
+            CommandParameter="tab-settings" />
+    <Grid x:Name="MainArea"
+          Padding="5">
+      <ContentView x:Name="TabKeypad"
+                   StyleId="tab-keypad"
+                   StyleClass="tab-page">
+        <Label Padding="10"
+               Text="未加载键盘" />
+      </ContentView>
+      <ContentView x:Name="TabSettings"
+                   StyleId="tab-settings"
+                   StyleClass="tab-page">
+        <ScrollView>
+          <VerticalStackLayout Padding="10"
+                               Spacing="5">
+            <HorizontalStackLayout IsVisible="{Binding IsWindows}"
+                                   IsEnabled="{Binding IsWindows}">
+              <Switch MinimumHeightRequest="0"
+                      MinimumWidthRequest="0"
+                      IsToggled="{Binding TopMost}" />
+              <Label Text="窗口置顶"
+                     VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <Label Text="键盘布局文件：" />
+            <Entry x:Name="LayoutEntry"
+                   Text="{Binding KeypadLayout, Mode=OneWay}"
+                   Unfocused="KeypadLayout_Entry_Unfocused" />
+            <HorizontalStackLayout Spacing="5"
+                                   Margin="0,0,0,5">
+              <Button Text="重置为默认"
+                      Clicked="KeypadLayout_Reset_Clicked" />
+              <Button Text="选择预设"
+                      Clicked="KeypadLayout_Select_Clicked" />
+              <Button Text="浏览本机文件"
+                      Clicked="KeypadLayout_Browse_Clicked" />
+              <Label x:Name="LayoutInfoLabel"
+                     Padding="5"
+                     Text="" />
+            </HorizontalStackLayout>
+
+            <Label Text="程序模式：" />
+            <VerticalStackLayout RadioButtonGroup.GroupName="KeyHandlerMode"
+                                 RadioButtonGroup.SelectedValue="{Binding KeyHandlerMode, Mode=TwoWay}">
+              <RadioButton IsVisible="{Binding IsWindows}"
+                           IsEnabled="{Binding IsWindows}"
+                           Value="{x:Static local:KeyHandlerMode.Local}"
+                           Content="本地软键盘" />
+              <RadioButton x:Name="ClientKeyHandlerMode"
+                           Value="{x:Static local:KeyHandlerMode.Client}"
+                           Content="客户端模式" />
+              <VerticalStackLayout Spacing="5"
+                                   Margin="10,0,0,0"
+                                   IsEnabled="{Binding IsChecked, Source={x:Reference ClientKeyHandlerMode}}">
+                <Label Text="远程地址：" />
+                <Entry Text="{Binding RemoteAddress}"
+                       Placeholder="&lt;tcp|udp&gt;://&lt;hostname&gt;[:&lt;port&gt;]" />
+              </VerticalStackLayout>
+              <VerticalStackLayout IsVisible="{Binding IsWindows}"
+                                   IsEnabled="{Binding IsWindows}">
+                <RadioButton x:Name="ServerKeyHandlerMode"
+                             Value="{x:Static local:KeyHandlerMode.Server}"
+                             Content="服务端模式" />
+                <VerticalStackLayout Spacing="5"
+                                     Margin="10,0,0,0"
+                                     IsEnabled="{Binding IsChecked, Source={x:Reference ServerKeyHandlerMode}}">
+                  <Label Text="监听地址：" />
+                  <Entry Text="{Binding LocalAddress}"
+                         Placeholder="&lt;tcp|udp&gt;://&lt;hostname&gt;[:&lt;port&gt;]" />
+                </VerticalStackLayout>
+              </VerticalStackLayout>
+              <HorizontalStackLayout Spacing="5"
+                                     Margin="0,5">
+                <Button Text="重置为默认"
+                        Clicked="KeyHandlerMode_Reset_Clicked" />
+                <Button Text="{Binding KeyHandlerMode, Converter={StaticResource KeyHandlerModeDisplay}}"
+                        Clicked="KeyHandlerMode_Start_Clicked" />
+                <Button IsVisible="{Binding KeyHandlerMode, Converter={StaticResource NotEquals}, ConverterParameter={x:Static local:KeyHandlerMode.Local}}"
+                        Text="停止"
+                        Clicked="KeyHandlerMode_Stop_Clicked" />
+              </HorizontalStackLayout>
+              <Label x:Name="KeyHandlerInfoLabel"
+                     Padding="5"
+                     Text="" />
+            </VerticalStackLayout>
+            <Button Margin="0,20,0,0"
+                    Text="重置所有配置"
+                    Clicked="ResetAll_Clicked" />
+          </VerticalStackLayout>
+        </ScrollView>
+      </ContentView>
+    </Grid>
+  </Grid>
+</ContentPage>
