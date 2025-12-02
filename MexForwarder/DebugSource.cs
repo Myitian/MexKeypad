@@ -1,4 +1,4 @@
-﻿using System.Buffers;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Net;
 
@@ -18,7 +18,7 @@ public sealed class DebugSource(IPEndPoint ep, BlockingCollection<(byte[], int)>
             try
             {
                 Convert.FromHexString(Console.ReadLine().AsSpan().Trim(), buffer, out _, out int received);
-                _queue.Add((buffer, received));
+                ReceiveData(buffer, received);
             }
             catch (Exception ex)
             {

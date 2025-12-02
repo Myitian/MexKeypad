@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+using MexShared;
+using System.Collections.Concurrent;
 using System.Net;
 
 namespace MexForwarder;
@@ -14,7 +15,7 @@ public sealed class ForwardDestination : BaseDestination
     {
         _token = token;
         _udp.Connect(ep);
-        _udp.ReceiveTimeout = Program.HeartbeatMax;
+        _udp.ReceiveTimeout = NetworkUtils.HeartbeatMax;
     }
 
     public override void Init()

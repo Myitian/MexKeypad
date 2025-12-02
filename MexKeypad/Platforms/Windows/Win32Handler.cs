@@ -1,5 +1,3 @@
-using MexKeypad.Platforms.Windows.Win32Input;
-using MexShared;
 using System.Runtime.InteropServices;
 
 namespace MexKeypad.Platforms.Windows;
@@ -35,58 +33,4 @@ public static partial class Win32Handler
         SetWindowLongPtrW(hWnd, GWL_EXSTYLE, currentExStyle | WS_EX_APPWINDOW);
         SetWindowPos(hWnd, noActivate ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     }
-
-    public static void HandleKeys(params ReadOnlySpan<KeyInfo> keys)
-    {
-        Span<Input> inputs = stackalloc Input[keys.Length];
-        int i = 0;
-        while (i < keys.Length)
-        {
-            KeyInfo ki = keys[i];
-            switch (ki.Flag & ~KeyFlag.KeyUp)
-            {
-                case KeyFlag.Unicode:
-                    inputs[i] = new KeyboardInput((char)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
-                    break;
-                case KeyFlag.VirtualKey:
-                    inputs[i] = new KeyboardInput((VirtualKey)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
-                    break;
-                case KeyFlag.ScanCode:
-                    inputs[i] = new KeyboardInput(ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
-                    break;
-                case KeyFlag.VirtualKeyWithScanCode:
-                    inputs[i] = new KeyboardInput((VirtualKey)ki.Extra, ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
-                    break;
-                case KeyFlag.Mouse:
-                    inputs[i] = new MouseInput()
-                    {
-                        Flags = (MouseEventFlag)(MouseFlagMap[ki.Extra] << (ki.Flag.HasFlag(KeyFlag.KeyUp) ? 1 : 0)),
-                        MouseData = ki.Value
-                    };
-                    break;
-                default:
-                    continue;
-            }
-            i++;
-        }
-        Input.Send(inputs[..i]);
-    }
-
-    public static ReadOnlySpan<int> MouseFlagMap => [
-        0b_00_00_00_00_0,
-        0b_00_00_00_01_0,
-        0b_00_00_01_00_0,
-        0b_00_00_01_01_0,
-        0b_00_01_00_00_0,
-        0b_00_01_00_01_0,
-        0b_00_01_01_00_0,
-        0b_00_01_01_01_0,
-        0b_01_00_00_00_0,
-        0b_01_00_00_01_0,
-        0b_01_00_01_00_0,
-        0b_01_00_01_01_0,
-        0b_01_01_00_00_0,
-        0b_01_01_00_01_0,
-        0b_01_01_01_00_0,
-        0b_01_01_01_01_0,];
 }

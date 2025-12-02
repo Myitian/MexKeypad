@@ -1,4 +1,5 @@
-﻿using System.Buffers;
+using MexShared;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Net;
 
@@ -15,7 +16,7 @@ public abstract class BaseDestination(IPEndPoint ep, BlockingCollection<(byte[],
     {
         while (!_queue.IsCompleted)
         {
-            if (_queue.TryTake(out (byte[] data, int received) o, Program.HeartbeatInterval))
+            if (_queue.TryTake(out (byte[] data, int received) o, NetworkUtils.HeartbeatInterval))
             {
                 SendPacket(o.data.AsSpan(..o.received));
                 ArrayPool<byte>.Shared.Return(o.data);

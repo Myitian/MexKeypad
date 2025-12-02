@@ -14,8 +14,8 @@
 
 		<ApplicationTitle>MexKeypad</ApplicationTitle>
 		<ApplicationId>net.myitian.mexkeypad</ApplicationId>
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+		<ApplicationVersion>2</ApplicationVersion>
     <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 		<WindowsPackageType>None</WindowsPackageType>
 
@@ -36,6 +36,10 @@
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#222222" BaseSize="128,128" />
     <MauiXaml Remove="Resources\Raw\**" />
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+    <MauiAsset Update="Resources\Raw\dynamic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </MauiAsset>
     <MauiAsset Update="Resources\Raw\spaces.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

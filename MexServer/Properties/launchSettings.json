@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MexServer": {
+      "commandName": "Project",
+      "commandLineArgs": "reverse://myitian.net:20001 Myitian"
+    }
+  }
+}

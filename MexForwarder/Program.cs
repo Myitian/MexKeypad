@@ -1,4 +1,4 @@
-﻿using MexShared;
+using MexShared;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Text;
@@ -7,11 +7,6 @@ namespace MexForwarder;
 
 class Program
 {
-    public const int HeartbeatInterval = 10000;
-    public const int HeartbeatMax = HeartbeatInterval * 4;
-    public const int AnyPort = IPEndPoint.MinPort;
-    public static readonly IPEndPoint Any = new(IPAddress.Any, AnyPort);
-    public static readonly IPEndPoint IPv6Any = new(IPAddress.IPv6Any, AnyPort);
     static int Main(string[] args)
     {
         if (args is not [string srcAddress, string dstAddress, ..])
@@ -21,6 +16,8 @@ class Program
                 A simple port forwarder for MexKeypad protocol.
                 Not for general purpose. No secure transmission. May have bugs.
                 Token is used by forward mode and reverse mode.
+                
+                Use Ctrl+C to break.
 
                 Address format: <direct|forward|reverse|debug>://<hostname>[:<port={NetworkUtils.DefaultPort}>]
                 direct: direct udp transmission

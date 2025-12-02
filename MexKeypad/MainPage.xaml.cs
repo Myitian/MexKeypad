@@ -7,6 +7,7 @@ namespace MexKeypad;
 public partial class MainPage : ContentPage
 {
     private static readonly string[] _embedLayouts = [
+        "embed:dynamic.xaml",
         "embed:f13-24.xaml",
         "embed:misc.xaml",
         "embed:numpad.xaml",
@@ -63,40 +64,164 @@ public partial class MainPage : ContentPage
         if (e.PropertyName is nameof(ConfigModel.KeypadLayout) or null && !_changingKeypadLayout)
             SetKeypadLayout(ConfigModel.KeypadLayout);
     }
+    private enum MexButtonType
+    {
+        None,
+        MexKey,
+        MexDyn,
+        MexDynDown,
+        MexDynUp,
+        MexDynUnicode,
+    }
     private void LoadKeypadLayoutFromXaml(string xaml)
     {
         try
         {
             TabKeypad.LoadFromXaml(xaml);
-            foreach (StyleableElement element in GetChildren(MainArea, true)
+            foreach ((StyleableElement element, MexButtonType type) in GetChildren(MainArea, true)
                 .OfType<StyleableElement>()
-                .Where(it => it.StyleClass?.Contains("mexkey") is true))
-            {
-                string message;
-                switch (element)
+                .Select(element =>
                 {
-                    case Button button when button.CommandParameter is string keys:
-                        if (KeyInfo.TryParseArray(keys, out message) is KeyInfo[] array)
+                    MexButtonType type = MexButtonType.None;
+                    foreach (string @class in element.StyleClass ?? [])
+                    {
+                        switch (@class)
                         {
-                            button.CommandParameter = array;
-                            button.Pressed += MexKey_Pressed;
-                            button.Released += MexKey_Released;
+                            case "mexkey":
+                                type = MexButtonType.MexKey;
+                                break;
+                            case "mexdyn":
+                                type = MexButtonType.MexDyn;
+                                break;
+                            case "mexdyn-down":
+                                type = MexButtonType.MexDynDown;
+                                break;
+                            case "mexdyn-up":
+                                type = MexButtonType.MexDynUp;
+                                break;
+                            case "mexdyn-unicode":
+                                type = MexButtonType.MexDynUnicode;
+                                break;
+                        }
+                    }
+                    return (element, type);
+                })
+                .Where(it => it.type is not MexButtonType.None))
+            {
 #if ANDROID
-                            (button.Handler?.PlatformView as Android.Widget.TextView)
-                                ?.SetMaxLines(int.MaxValue);
+                (element.Handler?.PlatformView as Android.Widget.TextView)?.SetMaxLines(int.MaxValue);
 #endif
-                            break;
-                        }
-                        throw new Exception(message);
-                    case ImageButton button when button.CommandParameter is string keys:
-                        if (KeyInfo.TryParseArray(keys, out message) is KeyInfo[] array2)
+                switch (type)
+                {
+                    case MexButtonType.MexKey:
+                        switch (element)
                         {
-                            button.CommandParameter = array2;
-                            button.Pressed += MexKey_Pressed;
-                            button.Released += MexKey_Released;
-                            break;
+                            case Button button when button.CommandParameter is string keys:
+                                if (KeyInfo.TryParseArray(keys, out string message0) is KeyInfo[] array0)
+                                {
+                                    button.CommandParameter = array0;
+                                    button.Pressed += MexKey_Pressed;
+                                    button.Released += MexKey_Released;
+                                    break;
+                                }
+                                throw new Exception(message0);
+                            case ImageButton button when button.CommandParameter is string keys:
+                                if (KeyInfo.TryParseArray(keys, out string message1) is KeyInfo[] array1)
+                                {
+                                    button.CommandParameter = array1;
+                                    button.Pressed += MexKey_Pressed;
+                                    button.Released += MexKey_Released;
+                                    break;
+                                }
+                                throw new Exception(message1);
                         }
-                        throw new Exception(message);
+                        break;
+                    case MexButtonType.MexDyn:
+                        switch (element)
+                        {
+                            case Button button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input0)
+                                {
+                                    button.CommandParameter = input0;
+                                    button.Pressed += MexDyn_Pressed;
+                                    button.Released += MexDyn_Released;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                            case ImageButton button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input1)
+                                {
+                                    button.CommandParameter = input1;
+                                    button.Pressed += MexDyn_Pressed;
+                                    button.Released += MexDyn_Released;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                        }
+                        break;
+                    case MexButtonType.MexDynDown:
+                        switch (element)
+                        {
+                            case Button button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input0)
+                                {
+                                    button.CommandParameter = input0;
+                                    button.Clicked += MexDyn_Pressed;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                            case ImageButton button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input1)
+                                {
+                                    button.CommandParameter = input1;
+                                    button.Clicked += MexDyn_Pressed;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                        }
+                        break;
+                    case MexButtonType.MexDynUp:
+                        switch (element)
+                        {
+                            case Button button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input0)
+                                {
+                                    button.CommandParameter = input0;
+                                    button.Clicked += MexDyn_Released;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                            case ImageButton button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input1)
+                                {
+                                    button.CommandParameter = input1;
+                                    button.Clicked += MexDyn_Released;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                        }
+                        break;
+                    case MexButtonType.MexDynUnicode:
+                        switch (element)
+                        {
+                            case Button button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input0)
+                                {
+                                    button.CommandParameter = input0;
+                                    button.Clicked += MexDynUnicode_Clicked;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                            case ImageButton button when button.CommandParameter is string name:
+                                if (TabKeypad.FindByName(name) is InputView input1)
+                                {
+                                    button.CommandParameter = input1;
+                                    button.Clicked += MexDynUnicode_Clicked;
+                                    break;
+                                }
+                                throw new Exception($"无效的引用：{name}");
+                        }
+                        break;
                 }
             }
         }
@@ -191,25 +316,46 @@ public partial class MainPage : ContentPage
         }
         _changingKeypadLayout = false;
     }
+    private static bool TryGetButtonParameter<T>(object? sender, [NotNullWhen(true)] out T? obj)
+    {
+        if (sender is Button { CommandParameter: T obj0 })
+            obj = obj0;
+        else if (sender is ImageButton { CommandParameter: T obj1 })
+            obj = obj1;
+        else
+        {
+            obj = default;
+            return false;
+        }
+        return true;
+    }
     private async ValueTask HandleKeys(bool keyUp, object? sender)
     {
-        KeyInfo[] keys;
-        switch (sender)
+        if (TryGetButtonParameter(sender, out KeyInfo[]? keys))
         {
-            case Button button when button.CommandParameter is KeyInfo[] array:
-                keys = array;
-                break;
-            case ImageButton button when button.CommandParameter is KeyInfo[] array:
-                keys = array;
-                break;
-            default:
+            try
+            {
+                await KeyHandler.HandleKeys(keyUp, keys);
+            }
+            catch { }
+        }
+    }
+    private async ValueTask HandleDynamicKeys(bool keyUp, object? sender)
+    {
+        if (TryGetButtonParameter(sender, out InputView? input))
+        {
+            // Future plan: Memory pooling -or/and- LRU cache
+            if (KeyInfo.TryParseArray(input.Text, out string message) is not KeyInfo[] keys)
+            {
+                await DisplayAlertAsync("错误", $"解析按键信息失败！\n{message}", "确认");
                 return;
+            }
+            try
+            {
+                await KeyHandler.HandleKeys(keyUp, keys);
+            }
+            catch { }
         }
-        try
-        {
-            await KeyHandler.HandleKeys(keyUp, keys);
-        }
-        catch { }
     }
     public async ValueTask RestartKeyHandler()
     {
@@ -280,6 +426,35 @@ public partial class MainPage : ContentPage
     private async void MexKey_Released(object? sender, EventArgs e)
     {
         await HandleKeys(true, sender);
+    }
+    private async void MexDyn_Pressed(object? sender, EventArgs e)
+    {
+        await HandleDynamicKeys(false, sender);
+    }
+    private async void MexDyn_Released(object? sender, EventArgs e)
+    {
+        await HandleDynamicKeys(true, sender);
+    }
+    private async void MexDynUnicode_Clicked(object? sender, EventArgs e)
+    {
+        if (TryGetButtonParameter(sender, out InputView? input)
+            && input.Text is { Length: > 0 } str)
+        {
+            try
+            {
+                // You should not send thousands of characters by this way.
+                // So here uses stackalloc.
+                Span<KeyInfo> keys = stackalloc KeyInfo[str.Length * 2];
+                int i = 0;
+                foreach (char c in str)
+                {
+                    keys[i++] = new(KeyFlag.Unicode, c);
+                    keys[i++] = new(KeyFlag.Unicode | KeyFlag.KeyUp, c);
+                }
+                await KeyHandler.HandleKeys(false, keys);
+            }
+            catch { }
+        }
     }
     private void AdaptiveGrid_SizeChanged(object? sender, EventArgs e)
     {

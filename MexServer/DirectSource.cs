@@ -1,16 +1,16 @@
 using MexShared;
 using System.Buffers;
-using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
-namespace MexForwarder;
+namespace MexServer;
 
-public sealed class DirectSource : BaseSource
+public sealed class DirectSource : NetworkHandler
 {
     private readonly IPEndPoint _from;
 
-    public DirectSource(IPEndPoint ep, BlockingCollection<(byte[], int)> queue) : base(ep, queue)
+    public DirectSource(IPEndPoint ep) : base(ep)
     {
         _from = ep.AddressFamily is AddressFamily.InterNetwork ?
             NetworkUtils.Any : NetworkUtils.IPv6Any;
@@ -34,7 +34,7 @@ public sealed class DirectSource : BaseSource
                     ArrayPool<byte>.Shared.Return(buffer);
                 }
                 else
-                    ReceiveData(buffer, received);
+                    KeyInfo.SendInput(MemoryMarshal.Cast<byte, KeyInfo>(buffer.AsSpan(0, received)));
             }
             catch (Exception ex) when (ex is not ObjectDisposedException)
             {

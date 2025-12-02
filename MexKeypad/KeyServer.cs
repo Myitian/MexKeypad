@@ -61,7 +61,7 @@ public partial class KeyServer : IKeyHandler
         if (keys.IsEmpty)
             return;
 #if WINDOWS
-        Platforms.Windows.Win32Handler.HandleKeys(keys);
+        KeyInfo.SendInput(keys);
 #endif
     }
     public ValueTask HandleKeys(bool keyUp, params ReadOnlySpan<KeyInfo> keys)

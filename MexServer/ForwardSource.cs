@@ -1,12 +1,12 @@
 using MexShared;
 using System.Buffers;
-using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
-namespace MexForwarder;
+namespace MexServer;
 
-public sealed class ForwardSource : BaseSource
+public sealed class ForwardSource : NetworkHandler
 {
     private readonly ReadOnlyMemory<byte> _token;
     private readonly IPEndPoint _from;
@@ -15,8 +15,7 @@ public sealed class ForwardSource : BaseSource
 
     public ForwardSource(
         IPEndPoint ep,
-        BlockingCollection<(byte[], int)> queue,
-        ReadOnlyMemory<byte> token) : base(ep, queue)
+        ReadOnlyMemory<byte> token) : base(ep)
     {
         _token = token;
         _from = ep.AddressFamily is AddressFamily.InterNetwork ?
@@ -53,7 +52,7 @@ public sealed class ForwardSource : BaseSource
                     ArrayPool<byte>.Shared.Return(buffer);
                 }
                 else if (ep.Equals(_remote) && DateTime.UtcNow.Ticks - _time < TimeSpan.TicksPerMinute)
-                    ReceiveData(buffer, received);
+                    KeyInfo.SendInput(MemoryMarshal.Cast<byte, KeyInfo>(buffer.AsSpan(0, received)));
             }
             catch (Exception ex) when (ex is not ObjectDisposedException)
             {

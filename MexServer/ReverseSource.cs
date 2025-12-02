@@ -1,18 +1,17 @@
 using MexShared;
 using System.Buffers;
-using System.Collections.Concurrent;
 using System.Net;
+using System.Runtime.InteropServices;
 
-namespace MexForwarder;
+namespace MexServer;
 
-public sealed class ReverseSource : BaseSource
+public sealed class ReverseSource : NetworkHandler
 {
     private readonly ReadOnlyMemory<byte> _token;
 
     public ReverseSource(
         IPEndPoint ep,
-        BlockingCollection<(byte[], int)> queue,
-        ReadOnlyMemory<byte> token) : base(ep, queue)
+        ReadOnlyMemory<byte> token) : base(ep)
     {
         _token = token;
         _udp.Connect(ep);
@@ -49,7 +48,7 @@ public sealed class ReverseSource : BaseSource
                     ArrayPool<byte>.Shared.Return(buffer);
                 }
                 else
-                    ReceiveData(buffer, received);
+                    KeyInfo.SendInput(MemoryMarshal.Cast<byte, KeyInfo>(buffer.AsSpan(0, received)));
             }
             catch (Exception ex) when (ex is not ObjectDisposedException)
             {

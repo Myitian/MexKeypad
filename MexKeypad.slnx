@@ -8,5 +8,6 @@
   <Project Path="MexKeypad/MexKeypad.csproj">
     <Deploy Solution="*|Any CPU" />
   </Project>
+  <Project Path="MexServer/MexServer.csproj" Id="73d8c6e6-0ddd-4f10-9a49-3cf06db81f9c" />
   <Project Path="MexShared/MexShared.csproj" Id="50ae6f8e-2272-42d1-acbc-276a1ce67bbc" />
 </Solution>

@@ -1,4 +1,4 @@
-﻿namespace MexKeypad.Platforms.Windows.Win32Input;
+namespace MexShared.Win32Input;
 
 public enum InputType
 {

@@ -1,22 +1,41 @@
+using MexShared.Win32Input;
 using System.Buffers.Binary;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace MexShared;
 
 // [Flag ][Extra][Value    ]
 // [uint8][uint8][uint16 LE]
 [StructLayout(LayoutKind.Sequential)]
-public struct KeyInfo(KeyFlag flag, ushort value, byte extra = 0)
+public struct KeyInfo(KeyFlag flag, ushort value, byte extra = 0) : IEquatable<KeyInfo>, IEqualityOperators<KeyInfo, KeyInfo, bool>
 {
     public KeyFlag Flag = flag;
     public byte Extra = extra;
-    public ushort _value = BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+    public ushort value = BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
     public ushort Value
     {
-        readonly get => BitConverter.IsLittleEndian ? _value : BinaryPrimitives.ReverseEndianness(_value);
-        set => _value = BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        readonly get => BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        set => this.value = BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+    }
+    public readonly bool Equals(KeyInfo other)
+    {
+        return Flag == other.Flag && Extra == other.Extra && value == other.value;
+    }
+    public override readonly bool Equals([NotNullWhen(true)] object? obj)
+    {
+        return obj is KeyInfo other && Equals(other);
+    }
+    public override readonly int GetHashCode()
+    {
+        return HashCode.Combine(Flag, Extra, value);
+    }
+    public override readonly string ToString()
+    {
+        return $"{{{Extra:X2}:{Value:X4}, {Flag}}}";
     }
     public static bool TryParse(scoped ReadOnlySpan<char> str, out KeyInfo keyInfo, [NotNullWhen(false)] out string? message)
     {
@@ -168,5 +187,70 @@ public struct KeyInfo(KeyFlag flag, ushort value, byte extra = 0)
         }
         message = "";
         return [.. list];
+    }
+
+    [SupportedOSPlatform("windows")]
+    public static void SendInput(params ReadOnlySpan<KeyInfo> keys)
+    {
+        Span<Input> inputs = stackalloc Input[keys.Length];
+        int i = 0;
+        while (i < keys.Length)
+        {
+            KeyInfo ki = keys[i];
+            switch (ki.Flag & ~KeyFlag.KeyUp)
+            {
+                case KeyFlag.Unicode:
+                    inputs[i] = new KeyboardInput((char)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.VirtualKey:
+                    inputs[i] = new KeyboardInput((VirtualKey)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.ScanCode:
+                    inputs[i] = new KeyboardInput(ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.VirtualKeyWithScanCode:
+                    inputs[i] = new KeyboardInput((VirtualKey)ki.Extra, ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.Mouse:
+                    inputs[i] = new MouseInput()
+                    {
+                        // Step#1: expand flag 0b00000_1111 to MOUSEEVENTF 0b_01_01_01_01_0
+                        // Step#2: if KeyUp, shift left by 1 bit to use XxxUp instead of XxxDown
+                        Flags = (MouseEventFlag)(MouseFlagMap[ki.Extra] << (ki.Flag.HasFlag(KeyFlag.KeyUp) ? 1 : 0)),
+                        MouseData = ki.Value
+                    };
+                    break;
+                default:
+                    continue;
+            }
+            i++;
+        }
+        Input.Send(inputs[..i]);
+    }
+    // Expand 0b000001111 to 0b010101010 (insert 0 after bit 0-3)
+    public static ReadOnlySpan<int> MouseFlagMap => [
+        0b_00_00_00_00_0,
+        0b_00_00_00_01_0,
+        0b_00_00_01_00_0,
+        0b_00_00_01_01_0,
+        0b_00_01_00_00_0,
+        0b_00_01_00_01_0,
+        0b_00_01_01_00_0,
+        0b_00_01_01_01_0,
+        0b_01_00_00_00_0,
+        0b_01_00_00_01_0,
+        0b_01_00_01_00_0,
+        0b_01_00_01_01_0,
+        0b_01_01_00_00_0,
+        0b_01_01_00_01_0,
+        0b_01_01_01_00_0,
+        0b_01_01_01_01_0,];
+    public static bool operator ==(KeyInfo left, KeyInfo right)
+    {
+        return left.Equals(right);
+    }
+    public static bool operator !=(KeyInfo left, KeyInfo right)
+    {
+        return !left.Equals(right);
     }
 }

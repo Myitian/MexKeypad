@@ -1,7 +1,7 @@
-using MexShared;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
-namespace MexKeypad.Platforms.Windows.Win32Input;
+namespace MexShared.Win32Input;
 
 [StructLayout(LayoutKind.Sequential)]
 public partial struct KeyboardInput
@@ -50,6 +50,7 @@ public partial struct KeyboardInput
         ExtraInfo = 0;
     }
 
+    [SupportedOSPlatform("windows")]
     [LibraryImport("user32", EntryPoint = "keybd_event")]
     private static partial void KeyboardEvent(byte bVk, byte bScan, KeyboardEventFlag dwFlags, nint dwExtraInfo);
 
@@ -60,6 +61,7 @@ public partial struct KeyboardInput
     /// When using <see cref="KeyboardEventFlag.Unicode" /> may not produce correct results
     /// because the value is truncated to <see cref="byte" />.
     /// </remarks>
+    [SupportedOSPlatform("windows")]
     public readonly void SendEvent()
     {
         KeyboardEvent((byte)Vk, (byte)Scan, Flags, ExtraInfo);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+using MexShared;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 
@@ -19,7 +20,7 @@ public sealed class ReverseDestination : BaseDestination
     {
         _token = token;
         _from = ep.AddressFamily is AddressFamily.InterNetwork ?
-            Program.Any : Program.IPv6Any;
+            NetworkUtils.Any : NetworkUtils.IPv6Any;
         _udp.Bind(ep);
     }
     public override void SendPacket(ReadOnlySpan<byte> data)

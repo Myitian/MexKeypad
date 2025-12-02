@@ -1,6 +1,7 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
-namespace MexKeypad.Platforms.Windows.Win32Input;
+namespace MexShared.Win32Input;
 
 [StructLayout(LayoutKind.Sequential)]
 public partial struct MouseInput
@@ -12,6 +13,7 @@ public partial struct MouseInput
     public uint Time;
     public nint ExtraInfo;
 
+    [SupportedOSPlatform("windows")]
     [LibraryImport("user32", EntryPoint = "mouse_event")]
     private static partial void MouseEvent(MouseEventFlag dwFlags, int dx, int dy, int dwData, nint dwExtraInfo);
 
@@ -22,6 +24,7 @@ public partial struct MouseInput
     /// When using <see cref="KeyboardEventFlag.Unicode" /> may not produce correct results
     /// because the value is truncated to <see cref="byte" />.
     /// </remarks>
+    [SupportedOSPlatform("windows")]
     public readonly void SendEvent()
     {
         MouseEvent(Flags, Dx, Dy, MouseData, ExtraInfo);

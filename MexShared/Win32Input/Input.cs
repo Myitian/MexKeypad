@@ -1,7 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
-namespace MexKeypad.Platforms.Windows.Win32Input;
+namespace MexShared.Win32Input;
 
 [StructLayout(LayoutKind.Sequential)]
 public partial struct Input
@@ -43,9 +44,11 @@ public partial struct Input
         U.HI = hi;
     }
 
+    [SupportedOSPlatform("windows")]
     [LibraryImport("user32", SetLastError = true)]
     private static partial int SendInput(int cInputs, scoped ReadOnlySpan<Input> pInputs, int cbSize);
 
+    [SupportedOSPlatform("windows")]
     public static int Send(params scoped ReadOnlySpan<Input> inputs)
     {
         return SendInput(inputs.Length, inputs, Size);
