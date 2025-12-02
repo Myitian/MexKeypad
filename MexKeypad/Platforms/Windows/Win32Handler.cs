@@ -1,4 +1,4 @@
-﻿using MexKeypad.Platforms.Windows.Win32Input;
+using MexKeypad.Platforms.Windows.Win32Input;
 using MexShared;
 using System.Runtime.InteropServices;
 
@@ -43,16 +43,50 @@ public static partial class Win32Handler
         while (i < keys.Length)
         {
             KeyInfo ki = keys[i];
-            if (ki.Flag > (KeyboardEventFlag)0xF)
-                continue;
-            else if (ki.Flag.HasFlag(KeyboardEventFlag.Unicode))
-                inputs[i] = new KeyboardInput((char)ki.Value, ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
-            else if (ki.Flag.HasFlag(KeyboardEventFlag.ScanCode))
-                inputs[i] = new KeyboardInput(ki.Value, ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
-            else
-                inputs[i] = new KeyboardInput((VirtualKey)ki.Value, ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
+            switch (ki.Flag & ~KeyFlag.KeyUp)
+            {
+                case KeyFlag.Unicode:
+                    inputs[i] = new KeyboardInput((char)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.VirtualKey:
+                    inputs[i] = new KeyboardInput((VirtualKey)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.ScanCode:
+                    inputs[i] = new KeyboardInput(ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.VirtualKeyWithScanCode:
+                    inputs[i] = new KeyboardInput((VirtualKey)ki.Extra, ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    break;
+                case KeyFlag.Mouse:
+                    inputs[i] = new MouseInput()
+                    {
+                        Flags = (MouseEventFlag)(MouseFlagMap[ki.Extra] << (ki.Flag.HasFlag(KeyFlag.KeyUp) ? 1 : 0)),
+                        MouseData = ki.Value
+                    };
+                    break;
+                default:
+                    continue;
+            }
             i++;
         }
         Input.Send(inputs[..i]);
     }
+
+    public static ReadOnlySpan<int> MouseFlagMap => [
+        0b_00_00_00_00_0,
+        0b_00_00_00_01_0,
+        0b_00_00_01_00_0,
+        0b_00_00_01_01_0,
+        0b_00_01_00_00_0,
+        0b_00_01_00_01_0,
+        0b_00_01_01_00_0,
+        0b_00_01_01_01_0,
+        0b_01_00_00_00_0,
+        0b_01_00_00_01_0,
+        0b_01_00_01_00_0,
+        0b_01_00_01_01_0,
+        0b_01_01_00_00_0,
+        0b_01_01_00_01_0,
+        0b_01_01_01_00_0,
+        0b_01_01_01_01_0,];
 }

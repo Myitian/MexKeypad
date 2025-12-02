@@ -1,7 +1,7 @@
-﻿namespace MexShared;
+namespace MexKeypad.Platforms.Windows.Win32Input;
 
 [Flags]
-public enum KeyboardEventFlag : byte
+public enum KeyboardEventFlag
 {
     ExtendedKey = 0x01,
     KeyUp = 0x02,

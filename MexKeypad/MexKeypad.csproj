@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0-android</TargetFrameworks>
@@ -16,7 +16,7 @@
 		<ApplicationId>net.myitian.mexkeypad</ApplicationId>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-
+    <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 		<WindowsPackageType>None</WindowsPackageType>
 
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">28.0</SupportedOSPlatformVersion>
@@ -32,7 +32,7 @@
 	</PropertyGroup>
 
   <ItemGroup>
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#222222" />
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#222222" />
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#222222" BaseSize="128,128" />
     <MauiXaml Remove="Resources\Raw\**" />
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
@@ -40,7 +40,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </MauiAsset>
-    <MauiAsset Update="Resources\Raw\unicode.xaml">
+    <MauiAsset Update="Resources\Raw\misc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </MauiAsset>

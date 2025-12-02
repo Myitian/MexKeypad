@@ -1,4 +1,4 @@
-﻿using MexShared;
+using MexShared;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
@@ -8,9 +8,9 @@ public partial class MainPage : ContentPage
 {
     private static readonly string[] _embedLayouts = [
         "embed:f13-24.xaml",
+        "embed:misc.xaml",
         "embed:numpad.xaml",
-        "embed:spaces.xaml",
-        "embed:unicode.xaml"];
+        "embed:spaces.xaml"];
     private bool _changingKeypadLayout = false;
     private readonly HttpClient _httpClient = new();
     public string Page { get; private set; }

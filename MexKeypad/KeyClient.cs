@@ -47,10 +47,10 @@ public partial class KeyClient : IKeyHandler
             int j = 0;
             for (int i = keys.Length - 1; i >= 0; i--)
             {
-                if (keys[i].Flag.HasFlag(KeyboardEventFlag.Unicode))
+                if (keys[i].Flag.HasFlag(KeyFlag.Unicode))
                     continue;
                 keyBuffer[j] = keys[i];
-                keyBuffer[j].Flag |= KeyboardEventFlag.KeyUp;
+                keyBuffer[j].Flag |= KeyFlag.KeyUp;
                 j++;
             }
             size = j * Unsafe.SizeOf<KeyInfo>();

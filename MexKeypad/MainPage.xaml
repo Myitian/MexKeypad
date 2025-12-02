@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MexKeypad"
@@ -148,9 +148,11 @@
                            Content="客户端模式" />
               <VerticalStackLayout Spacing="5"
                                    Margin="10,0,0,0"
+                                   x:DataType="RadioButton"
                                    IsEnabled="{Binding IsChecked, Source={x:Reference ClientKeyHandlerMode}}">
                 <Label Text="远程地址：" />
-                <Entry Text="{Binding RemoteAddress}"
+                <Entry x:DataType="local:ConfigModel"
+                       Text="{Binding RemoteAddress}"
                        Placeholder="&lt;tcp|udp&gt;://&lt;hostname&gt;[:&lt;port&gt;]" />
               </VerticalStackLayout>
               <VerticalStackLayout IsVisible="{Binding IsWindows}"
@@ -160,9 +162,11 @@
                              Content="服务端模式" />
                 <VerticalStackLayout Spacing="5"
                                      Margin="10,0,0,0"
+                                     x:DataType="RadioButton"
                                      IsEnabled="{Binding IsChecked, Source={x:Reference ServerKeyHandlerMode}}">
                   <Label Text="监听地址：" />
-                  <Entry Text="{Binding LocalAddress}"
+                  <Entry x:DataType="local:ConfigModel"
+                         Text="{Binding LocalAddress}"
                          Placeholder="&lt;tcp|udp&gt;://&lt;hostname&gt;[:&lt;port&gt;]" />
                 </VerticalStackLayout>
               </VerticalStackLayout>
