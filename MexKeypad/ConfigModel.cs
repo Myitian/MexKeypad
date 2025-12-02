@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -56,7 +56,7 @@ public partial class ConfigModel(Command<string> switchPage, IPreferences? prefe
     #endregion RemoteAddress
 
     #region LocalAddress
-    public static readonly string LocalAddressDefaultValue = "tcp://localhost:6957";
+    public static readonly string LocalAddressDefaultValue = "udp://localhost:6957";
     public string LocalAddress
     {
         get => GetConfig(LocalAddressDefaultValue);
