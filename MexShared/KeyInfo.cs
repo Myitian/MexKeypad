@@ -38,7 +38,7 @@ public struct KeyInfo(KeyboardEventFlag flag, ushort value)
             keyInfo.Flag |= KeyboardEventFlag.ExtendedKey;
             value = value[1..];
         }
-        if (value.StartsWith("0x") && ushort.TryParse(value, NumberStyles.HexNumber, null, out ushort u))
+        if (value.StartsWith("0x") && ushort.TryParse(value[2..], NumberStyles.HexNumber, null, out ushort u))
             keyInfo.Value = u;
         else if (ushort.TryParse(value, out u))
             keyInfo.Value = u;
@@ -88,6 +88,11 @@ public struct KeyInfo(KeyboardEventFlag flag, ushort value)
                 return null;
             }
             list.Add(ki);
+            if (ki.Flag.HasFlag(KeyboardEventFlag.Unicode))
+            {
+                ki.Flag |= KeyboardEventFlag.KeyUp;
+                list.Add(ki);
+            }
         }
         message = "";
         return [.. list];

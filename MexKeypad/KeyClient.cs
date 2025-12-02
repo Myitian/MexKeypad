@@ -1,4 +1,4 @@
-﻿using MexShared;
+using MexShared;
 using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
@@ -40,21 +40,20 @@ public partial class KeyClient : IKeyHandler
         using IMemoryOwner<byte> mem = MemoryPool<byte>.Shared.Rent(size);
         Memory<byte> buffer = mem.Memory;
         Span<KeyInfo> keyBuffer = MemoryMarshal.Cast<byte, KeyInfo>(buffer.Span);
-        if (keyUp)
-        {
-            for (int i = 0; i < keys.Length; i++)
-            {
-                keyBuffer[i] = keys[i];
-                keyBuffer[i].Flag |= KeyboardEventFlag.KeyUp;
-            }
-        }
+        if (!keyUp)
+            keys.CopyTo(keyBuffer);
         else
         {
-            for (int i = 0; i < keys.Length; i++)
+            int j = 0;
+            for (int i = keys.Length - 1; i >= 0; i--)
             {
-                keyBuffer[i] = keys[i];
-                keyBuffer[i].Flag &= ~KeyboardEventFlag.KeyUp;
+                if (keys[i].Flag.HasFlag(KeyboardEventFlag.Unicode))
+                    continue;
+                keyBuffer[j] = keys[i];
+                keyBuffer[j].Flag |= KeyboardEventFlag.KeyUp;
+                j++;
             }
+            size = j * Unsafe.SizeOf<KeyInfo>();
         }
         return HandleKeysInternal(buffer[..size]);
     }

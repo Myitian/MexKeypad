@@ -7,8 +7,10 @@ namespace MexKeypad;
 public partial class MainPage : ContentPage
 {
     private static readonly string[] _embedLayouts = [
+        "embed:f13-24.xaml",
         "embed:numpad.xaml",
-        "embed:f13-24.xaml"];
+        "embed:spaces.xaml",
+        "embed:unicode.xaml"];
     private bool _changingKeypadLayout = false;
     private readonly HttpClient _httpClient = new();
     public string Page { get; private set; }
@@ -79,6 +81,10 @@ public partial class MainPage : ContentPage
                             button.CommandParameter = array;
                             button.Pressed += MexKey_Pressed;
                             button.Released += MexKey_Released;
+#if ANDROID
+                            (button.Handler?.PlatformView as Android.Widget.TextView)
+                                ?.SetMaxLines(int.MaxValue);
+#endif
                             break;
                         }
                         throw new Exception(message);
@@ -297,7 +303,7 @@ public partial class MainPage : ContentPage
     private async void KeypadLayout_Select_Clicked(object? sender, EventArgs e)
     {
         string selectedAction = await DisplayActionSheetAsync("请选择一个预设", "取消", null, _embedLayouts);
-        if (selectedAction.StartsWith("embed:"))
+        if (selectedAction.AsSpan().StartsWith("embed:"))
             SetKeypadLayout(selectedAction);
     }
     private async void KeypadLayout_Browse_Clicked(object? sender, EventArgs e)

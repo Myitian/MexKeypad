@@ -1,0 +1,123 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MexKeypad">
+  <Grid RowSpacing="5"
+        ColumnSpacing="5">
+    <Grid.Resources>
+      <Style TargetType="Button"
+             Class="mexkey">
+        <Setter Property="FontSize"
+                Value="20" />
+      </Style>
+    </Grid.Resources>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Button Grid.Row="0"
+            Grid.Column="0"
+            Text="😀"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE00" />
+    <Button Grid.Row="0"
+            Grid.Column="1"
+            Text="😁"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE01" />
+    <Button Grid.Row="0"
+            Grid.Column="2"
+            Text="😂"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE02" />
+    <Button Grid.Row="0"
+            Grid.Column="3"
+            Text="🤣"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83E,u:0xDD23" />
+    <Button Grid.Row="0"
+            Grid.Column="4"
+            Text="😃"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE03" />
+    
+    <Button Grid.Row="1"
+            Grid.Column="0"
+            Text="😄"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE04" />
+    <Button Grid.Row="1"
+            Grid.Column="1"
+            Text="😅"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE05" />
+    <Button Grid.Row="1"
+            Grid.Column="2"
+            Text="😆"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE06" />
+    <Button Grid.Row="1"
+            Grid.Column="3"
+            Text="😉"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE09" />
+    <Button Grid.Row="1"
+            Grid.Column="4"
+            Text="😊"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE0A" />
+    
+    <Button Grid.Row="2"
+            Grid.Column="0"
+            Text="😋"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE0B" />
+    <Button Grid.Row="2"
+            Grid.Column="1"
+            Text="😎"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE0E" />
+    <Button Grid.Row="2"
+            Grid.Column="2"
+            Text="😍"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE0D" />
+    <Button Grid.Row="2"
+            Grid.Column="3"
+            Text="😘"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83D,u:0xDE18" />
+    <Button Grid.Row="2"
+            Grid.Column="4"
+            Text="🥰"
+            StyleClass="mexkey"
+            CommandParameter="u:0xD83E,u:0xDD70" />
+
+    <Button Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Text="你好"
+            StyleClass="mexkey"
+            CommandParameter="u:你,u:好" />
+    <Button Grid.Row="3"
+            Grid.Column="2"
+            Grid.ColumnSpan="2"
+            Text="Hello"
+            StyleClass="mexkey"
+            CommandParameter="u:H,u:e,u:l,u:l,u:o" />
+    <Button Grid.Row="3"
+            Grid.Column="4"
+            Text="Ctrl+C"
+            StyleClass="mexkey"
+            CommandParameter="sc:0x1D,sc:0x2E" />
+  </Grid>
+</ContentView>

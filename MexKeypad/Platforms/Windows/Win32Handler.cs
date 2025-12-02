@@ -1,4 +1,4 @@
-﻿using MexKeypad.Platforms.Windows.Win32;
+﻿using MexKeypad.Platforms.Windows.Win32Input;
 using MexShared;
 using System.Runtime.InteropServices;
 
@@ -36,7 +36,7 @@ public static partial class Win32Handler
         SetWindowPos(hWnd, noActivate ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     }
 
-    public static void HandleKeys(bool? keyUp, params ReadOnlySpan<KeyInfo> keys)
+    public static void HandleKeys(params ReadOnlySpan<KeyInfo> keys)
     {
         Span<Input> inputs = stackalloc Input[keys.Length];
         int i = 0;
@@ -46,11 +46,11 @@ public static partial class Win32Handler
             if (ki.Flag > (KeyboardEventFlag)0xF)
                 continue;
             else if (ki.Flag.HasFlag(KeyboardEventFlag.Unicode))
-                inputs[i] = new KeyboardInput((char)ki.Value, keyUp ?? ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
+                inputs[i] = new KeyboardInput((char)ki.Value, ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
             else if (ki.Flag.HasFlag(KeyboardEventFlag.ScanCode))
-                inputs[i] = new KeyboardInput(ki.Value, keyUp ?? ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
+                inputs[i] = new KeyboardInput(ki.Value, ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
             else
-                inputs[i] = new KeyboardInput((VirtualKey)ki.Value, keyUp ?? ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
+                inputs[i] = new KeyboardInput((VirtualKey)ki.Value, ki.Flag.HasFlag(KeyboardEventFlag.KeyUp));
             i++;
         }
         Input.Send(inputs[..i]);

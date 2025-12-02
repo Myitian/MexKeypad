@@ -1,0 +1,152 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MexKeypad">
+  <Grid RowSpacing="5"
+        ColumnSpacing="5">
+    <Grid.Resources>
+      <Style TargetType="Button"
+             Class="mexkey">
+        <Setter Property="FontSize"
+                Value="12" />
+      </Style>
+    </Grid.Resources>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Button Grid.Row="0"
+            Grid.Column="0"
+            Text="TAB"
+            StyleClass="mexkey"
+            CommandParameter="u:0x0009" />
+    <Button Grid.Row="0"
+            Grid.Column="1"
+            Text="SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x0020" />
+    <Button Grid.Row="0"
+            Grid.Column="2"
+            Text="NO-BREAK&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x00A0" />
+    <Button Grid.Row="0"
+            Grid.Column="3"
+            Text="MONGOLIAN&#10;VOWEL&#10;SEPARATOR"
+            StyleClass="mexkey"
+            CommandParameter="u:0x180E" />
+    <Button Grid.Row="0"
+            Grid.Column="4"
+            Text="EN&#10;QUAD"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2000" />
+    <Button Grid.Row="0"
+            Grid.Column="5"
+            Text="EM&#10;QUAD"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2001" />
+    
+    <Button Grid.Row="1"
+            Grid.Column="0"
+            Text="EN&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2002" />
+    <Button Grid.Row="1"
+            Grid.Column="1"
+            Text="EM&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2003" />
+    <Button Grid.Row="1"
+            Grid.Column="2"
+            Text="1/3 EM&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2004" />
+    <Button Grid.Row="1"
+            Grid.Column="3"
+            Text="1/4 EM&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2005" />
+    <Button Grid.Row="1"
+            Grid.Column="4"
+            Text="1/6 EM&#10;QUAD"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2006" />
+    <Button Grid.Row="1"
+            Grid.Column="5"
+            Text="FIGURE&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2007" />
+    
+    <Button Grid.Row="2"
+            Grid.Column="0"
+            Text="PUNCTUATION&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2008" />
+    <Button Grid.Row="2"
+            Grid.Column="1"
+            Text="THIN&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2009" />
+    <Button Grid.Row="2"
+            Grid.Column="2"
+            Text="HAIR&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x200A" />
+    <Button Grid.Row="2"
+            Grid.Column="3"
+            Text="ZERO WIDTH&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x200B" />
+    <Button Grid.Row="2"
+            Grid.Column="4"
+            Text="ZERO WIDTH&#10;NON-JOINER"
+            StyleClass="mexkey"
+            CommandParameter="u:0x200C" />
+    <Button Grid.Row="2"
+            Grid.Column="5"
+            Text="ZERO WIDTH&#10;JOINER"
+            StyleClass="mexkey"
+            CommandParameter="u:0x200D" />
+
+    <Button Grid.Row="3"
+            Grid.Column="0"
+            Text="MEDIUM&#10;MATHEMATICAL&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x205F" />
+    <Button Grid.Row="3"
+            Grid.Column="1"
+            Text="WORD&#10;JOINER"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2060" />
+    <Button Grid.Row="3"
+            Grid.Column="2"
+            Text="BRAILLE&#10;PATTERN&#10;BLANK"
+            StyleClass="mexkey"
+            CommandParameter="u:0x2800" />
+    <Button Grid.Row="3"
+            Grid.Column="3"
+            Text="IDEOGRAPHIC&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0x3000" />
+    <Button Grid.Row="3"
+            Grid.Column="4"
+            Text="HANGUL&#10;FILLER"
+            StyleClass="mexkey"
+            CommandParameter="u:0x3164" />
+    <Button Grid.Row="3"
+            Grid.Column="5"
+            Text="ZERO WIDTH&#10;NO-BREAK&#10;SPACE"
+            StyleClass="mexkey"
+            CommandParameter="u:0xFEFF" />
+  </Grid>
+</ContentView>

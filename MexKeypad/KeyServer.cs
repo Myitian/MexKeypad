@@ -1,4 +1,4 @@
-﻿using MexShared;
+using MexShared;
 using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
@@ -40,8 +40,7 @@ public partial class KeyServer : IKeyHandler
             if (read < required)
                 break;
             Span<byte> span = memory.Span[..(offset + read)];
-            ReadOnlySpan<KeyInfo> keys = MemoryMarshal.Cast<byte, KeyInfo>(span);
-            HandleKeysStatic(null, keys);
+            HandleKeysStatic(MemoryMarshal.Cast<byte, KeyInfo>(span));
             offset = span.Length % keyInfoSize;
             if (offset > 0)
                 span[^offset..].CopyTo(span);
@@ -54,20 +53,35 @@ public partial class KeyServer : IKeyHandler
         while (!cancellationToken.IsCancellationRequested)
         {
             UdpReceiveResult result = await listener.ReceiveAsync(cancellationToken);
-            HandleKeysStatic(null, MemoryMarshal.Cast<byte, KeyInfo>(result.Buffer));
+            HandleKeysStatic(MemoryMarshal.Cast<byte, KeyInfo>(result.Buffer));
         }
     }
-    public static void HandleKeysStatic(bool? keyUp, params ReadOnlySpan<KeyInfo> keys)
+    public static void HandleKeysStatic(params ReadOnlySpan<KeyInfo> keys)
     {
         if (keys.IsEmpty)
             return;
 #if WINDOWS
-        Platforms.Windows.Win32Handler.HandleKeys(keyUp, keys);
+        Platforms.Windows.Win32Handler.HandleKeys(keys);
 #endif
     }
     public ValueTask HandleKeys(bool keyUp, params ReadOnlySpan<KeyInfo> keys)
     {
-        HandleKeysStatic(keyUp, keys);
+        if (!keyUp)
+            HandleKeysStatic(keys);
+        else
+        {
+            Span<KeyInfo> keyBuffer = stackalloc KeyInfo[keys.Length];
+            int j = 0;
+            for (int i = keys.Length - 1; i >= 0; i--)
+            {
+                if (keys[i].Flag.HasFlag(KeyboardEventFlag.Unicode))
+                    continue;
+                keyBuffer[j] = keys[i];
+                keyBuffer[j].Flag |= KeyboardEventFlag.KeyUp;
+                j++;
+            }
+            HandleKeysStatic(keyBuffer[..j]);
+        }
         return ValueTask.CompletedTask;
     }
     public async ValueTask<Exception[]?> Start(string uriString)

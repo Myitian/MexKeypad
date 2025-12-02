@@ -12,6 +12,10 @@ public partial class App : Application
         MainPage mainPage = new();
         TitleBar titleBar = new() { Title = mainPage.Title };
         titleBar.SetAppThemeColor(VisualElement.BackgroundColorProperty, Colors.White, Colors.Black);
-        return new(mainPage) { TitleBar = titleBar };
+        return new(mainPage)
+        {
+            Title = mainPage.Title,
+            TitleBar = titleBar
+        };
     }
 }

@@ -15,9 +15,6 @@
   <Color x:Key="LightBackgroundPrimary">#FFFFFF</Color>
   <Color x:Key="LightBackgroundSecondary">#F8F8F8</Color>
   <Color x:Key="LightBackgroundTertiary">#F0F0F0</Color>
-  <Color x:Key="LightBorderDefault">#E0E0E0</Color>
-  <Color x:Key="LightBorderHover">#CCCCCC</Color>
-  <Color x:Key="LightBorderActive">#2563EB</Color>
 
   <Color x:Key="DarkPrimaryLighter">#222222</Color>
   <Color x:Key="DarkPrimaryLight">#333333</Color>
@@ -33,16 +30,4 @@
   <Color x:Key="DarkBackgroundPrimary">#111111</Color>
   <Color x:Key="DarkBackgroundSecondary">#222222</Color>
   <Color x:Key="DarkBackgroundTertiary">#333333</Color>
-  <Color x:Key="DarkBorderDefault">#444444</Color>
-  <Color x:Key="DarkBorderHover">#555555</Color>
-  <Color x:Key="DarkBorderActive">#3B82F6</Color>
-
-  <Color x:Key="Gray100">#E1E1E1</Color>
-  <Color x:Key="Gray200">#C8C8C8</Color>
-  <Color x:Key="Gray300">#ACACAC</Color>
-  <Color x:Key="Gray400">#919191</Color>
-  <Color x:Key="Gray500">#6E6E6E</Color>
-  <Color x:Key="Gray600">#404040</Color>
-  <Color x:Key="Gray900">#212121</Color>
-  <Color x:Key="Gray950">#141414</Color>
 </ResourceDictionary>
