@@ -7,7 +7,7 @@ public class NetworkUtils
 {
     public const int DefaultPort = 6957;
     public const int HeartbeatInterval = 10000;
-    public const int HeartbeatMax = HeartbeatInterval * 4;
+    public const int HeartbeatMax = HeartbeatInterval * 6;
     public const int AnyPort = IPEndPoint.MinPort;
     public static readonly IPEndPoint Any = new(IPAddress.Any, AnyPort);
     public static readonly IPEndPoint IPv6Any = new(IPAddress.IPv6Any, AnyPort);

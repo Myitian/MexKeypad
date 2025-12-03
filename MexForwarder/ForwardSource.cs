@@ -36,24 +36,26 @@ public sealed class ForwardSource : BaseSource
                 byte[] buffer = ArrayPool<byte>.Shared.Rent(0x10000);
                 int received = _udp.ReceiveFrom(buffer, ref ep);
                 if (ep.Equals(_remote))
-                    _time = DateTime.UtcNow.Ticks;
-                if (received == 0)
                 {
-                    ReceiveHeartbeat();
-                    ArrayPool<byte>.Shared.Return(buffer);
+                    _time = DateTime.UtcNow.Ticks;
+                    if (received == 0)
+                    {
+                        ReceiveHeartbeat();
+                        ArrayPool<byte>.Shared.Return(buffer);
+                    }
+                    else if (DateTime.UtcNow.Ticks - _time < NetworkUtils.HeartbeatMax * TimeSpan.TicksPerMillisecond)
+                        ReceiveData(buffer, received);
                 }
-                else if (buffer[0] is byte.MaxValue)
+                else if (received > 0 && buffer[0] is byte.MaxValue)
                 {
                     if (buffer.AsSpan(1, received - 1).SequenceEqual(_token.Span))
                     {
                         _remote = ep;
                         _time = DateTime.UtcNow.Ticks;
-                        Console.WriteLine($"[{DateTime.UtcNow:O}] Established connection with {_remote}.");
+                        Console.WriteLine($"[{DateTime.UtcNow:O}] {_name} Established connection with {_remote}.");
                     }
                     ArrayPool<byte>.Shared.Return(buffer);
                 }
-                else if (ep.Equals(_remote) && DateTime.UtcNow.Ticks - _time < TimeSpan.TicksPerMinute)
-                    ReceiveData(buffer, received);
             }
             catch (Exception ex) when (ex is not ObjectDisposedException)
             {

@@ -25,7 +25,8 @@ public sealed class ReverseDestination : BaseDestination
     }
     public override void SendPacket(ReadOnlySpan<byte> data)
     {
-        if (DateTime.UtcNow.Ticks - _time < TimeSpan.TicksPerMinute && _remote is not null)
+        if (DateTime.UtcNow.Ticks - _time < NetworkUtils.HeartbeatMax * TimeSpan.TicksPerMillisecond
+            && _remote is not null)
             _udp.SendTo(data, _remote);
     }
     public override void SendHeartbeat()
@@ -49,7 +50,7 @@ public sealed class ReverseDestination : BaseDestination
                 {
                     _remote = ep;
                     _time = DateTime.UtcNow.Ticks;
-                    Console.WriteLine($"[{DateTime.UtcNow:O}] Established connection with {_remote}.");
+                    Console.WriteLine($"[{DateTime.UtcNow:O}] {_name} Established connection with {_remote}.");
                 }
             }
             catch (Exception ex) when (ex is not ObjectDisposedException)

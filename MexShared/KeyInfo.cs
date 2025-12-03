@@ -10,7 +10,7 @@ namespace MexShared;
 
 // [Flag ][Extra][Value    ]
 // [uint8][uint8][uint16 LE]
-[StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 4)]
 public struct KeyInfo(KeyFlag flag, ushort value, byte extra = 0) : IEquatable<KeyInfo>, IEqualityOperators<KeyInfo, KeyInfo, bool>
 {
     public KeyFlag Flag = flag;
@@ -179,7 +179,7 @@ public struct KeyInfo(KeyFlag flag, ushort value, byte extra = 0) : IEquatable<K
                 return null;
             }
             list.Add(ki);
-            if (ki.Flag.HasFlag(KeyFlag.Unicode))
+            if (ki.Flag is KeyFlag.Unicode)
             {
                 ki.Flag |= KeyFlag.KeyUp;
                 list.Add(ki);
@@ -200,23 +200,23 @@ public struct KeyInfo(KeyFlag flag, ushort value, byte extra = 0) : IEquatable<K
             switch (ki.Flag & ~KeyFlag.KeyUp)
             {
                 case KeyFlag.Unicode:
-                    inputs[i] = new KeyboardInput((char)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    inputs[i] = new KeyboardInput((char)ki.Value, ki.Flag < 0);
                     break;
                 case KeyFlag.VirtualKey:
-                    inputs[i] = new KeyboardInput((VirtualKey)ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    inputs[i] = new KeyboardInput((VirtualKey)ki.Value, ki.Flag < 0);
                     break;
                 case KeyFlag.ScanCode:
-                    inputs[i] = new KeyboardInput(ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    inputs[i] = new KeyboardInput(ki.Value, ki.Flag < 0);
                     break;
                 case KeyFlag.VirtualKeyWithScanCode:
-                    inputs[i] = new KeyboardInput((VirtualKey)ki.Extra, ki.Value, ki.Flag.HasFlag(KeyFlag.KeyUp));
+                    inputs[i] = new KeyboardInput((VirtualKey)ki.Extra, ki.Value, ki.Flag < 0);
                     break;
                 case KeyFlag.Mouse:
                     inputs[i] = new MouseInput()
                     {
                         // Step#1: expand flag 0b00000_1111 to MOUSEEVENTF 0b_01_01_01_01_0
                         // Step#2: if KeyUp, shift left by 1 bit to use XxxUp instead of XxxDown
-                        Flags = (MouseEventFlag)(MouseFlagMap[ki.Extra] << (ki.Flag.HasFlag(KeyFlag.KeyUp) ? 1 : 0)),
+                        Flags = (MouseEventFlag)(MouseFlagMap[ki.Extra] << ((int)ki.Flag >> 7)),
                         MouseData = ki.Value
                     };
                     break;

@@ -40,15 +40,11 @@ public sealed class ReverseSource : NetworkHandler
         {
             try
             {
-                byte[] buffer = ArrayPool<byte>.Shared.Rent(0x10000);
-                int received = _udp.Receive(buffer);
+                int received = _udp.Receive(_buffer);
                 if (received == 0)
-                {
                     ReceiveHeartbeat();
-                    ArrayPool<byte>.Shared.Return(buffer);
-                }
                 else
-                    KeyInfo.SendInput(MemoryMarshal.Cast<byte, KeyInfo>(buffer.AsSpan(0, received)));
+                    ReceiveData(received);
             }
             catch (Exception ex) when (ex is not ObjectDisposedException)
             {

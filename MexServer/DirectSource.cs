@@ -26,15 +26,11 @@ public sealed class DirectSource : NetworkHandler
             try
             {
                 EndPoint ep = _from;
-                byte[] buffer = ArrayPool<byte>.Shared.Rent(0x10000);
-                int received = _udp.ReceiveFrom(buffer, ref ep);
+                int received = _udp.ReceiveFrom(_buffer, ref ep);
                 if (received == 0)
-                {
                     ReceiveHeartbeat();
-                    ArrayPool<byte>.Shared.Return(buffer);
-                }
                 else
-                    KeyInfo.SendInput(MemoryMarshal.Cast<byte, KeyInfo>(buffer.AsSpan(0, received)));
+                    ReceiveData(received);
             }
             catch (Exception ex) when (ex is not ObjectDisposedException)
             {
